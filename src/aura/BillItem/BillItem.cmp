@@ -1,0 +1,55 @@
+<aura:component implements="force:hasRecordId" access="global">
+
+    <!--Id on main record-->
+    <aura:attribute name="billId" type="Id"/>
+    <!--Target fields for force:recordData-->
+    <aura:attribute name="targetFields" type="Bill__c"/>
+    <!--Show dialog for editing record modal window flag-->
+    <aura:attribute name="showDialog" type="String"/>
+    <!--Record id that will be edited when modal window is shown-->
+    <aura:attribute name="remoteRecordId" type="Id"/>
+
+    <!--Record data main implementation-->
+    <force:recordData aura:id="billRecord"
+                      recordId="{!v.billId}"
+                      targetFields="{!v.targetFields}"
+                      fields="Name, Status__c, Price__c, Pay_Date__c, Category__c, Loan_Holder__r.Name, Description__c"/>
+
+    <!--Main body-->
+    <div class="slds-media">
+        <div class="slds-media__figure">
+            <!--Icon goes here-->
+            <!--<img src="{!v.targetFields.Thumbnail__c}" class="slds-avatar&#45;&#45;large slds-avatar&#45;&#45;circle" alt="{!v.targetFields.Title_c}" />-->
+        </div>
+        <div class="slds-media__body">
+            <div class="slds-grid">
+                <a onclick="{!c.editRecord}">
+                    <h3 class="slds-text-heading--small slds-m-bottom--xx-small">{!v.targetFields.Name}</h3>
+                </a>
+                <lightning:buttonIcon iconName="utility:edit" class="slds-col--bump-left" variant="bare"
+                                      alternativeText="Edytuj" onclick="{!c.editRecord}"/>
+            </div>
+            <!--Detail body-->
+            <div aura:id="billDetail" class="slds-m-top--small">
+                <ul class="slds-grid slds-wrap">
+                    <li class="slds-list__item slds-size--1-of-3"><span
+                            class="slds-text-color--weak slds-m-right--small">Status:</span> {!v.targetFields.Status__c}
+                    </li>
+                    <li class="slds-list__item slds-size--1-of-3"><span
+                            class="slds-text-color--weak slds-m-right--small">Kwota:</span>
+                        <ui:outputCurrency value="{!v.targetFields.Price__c}"/>
+                    </li>
+                    <li class="slds-list__item slds-size--1-of-3"><span
+                            class="slds-text-color--weak slds-m-right--small">Data płatności:</span> {!v.targetFields.Pay_Date__c}
+                    </li>
+                    <li class="slds-list__item slds-size--1-of-3"><span
+                            class="slds-text-color--weak slds-m-right--small">Wierzyciel:</span> {!v.targetFields.Loan_Holder__r.Name}
+                    </li>
+                    <li class="slds-list__item slds-size--1-of-3"><span
+                            class="slds-text-color--weak slds-m-right--small">Opis:</span> {!v.targetFields.Description__c}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</aura:component>

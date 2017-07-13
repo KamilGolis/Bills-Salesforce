@@ -1,0 +1,35 @@
+<!--
+ - Created by Trot on 2017-07-04.
+ -->
+
+<aura:component description="BillsLayoutComponent"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId"
+                access="global">
+
+    <!--Handlers for spinner events-->
+    <aura:handler name="showSpinner" event="c:showSpinner" action="{!c.showSpinner}"/>
+    <aura:handler name="hideSpinner" event="c:hideSpinner" action="{!c.hideSpinner}"/>
+
+    <!--Spinner on/off flag-->
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+
+    <!--loading spinner start... style=Brand Medium (blue dots)-->
+    <aura:if isTrue="{!v.Spinner}">
+        <lightning:spinner variant="brand" size="large"/>
+    </aura:if>
+    <!-- Loading spinner end-->
+
+    <!--Rest of app layout-->
+    <div>
+        <lightning:layout class="slds-is-relative">
+            <lightning:layoutItem size="9" flexibility="auto" padding="around-small">
+                <c:BillsListPagination />
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="4" flexibility="auto" padding="around-small">
+                <c:BillSummary />
+            </lightning:layoutItem>
+        </lightning:layout>
+
+    </div>
+</aura:component>

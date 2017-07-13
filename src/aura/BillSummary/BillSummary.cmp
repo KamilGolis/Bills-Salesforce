@@ -1,0 +1,33 @@
+<!--
+ - Created by Trot on 2017-07-03.
+ -->
+
+<aura:component description="BillSummary" controller="BillController" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId"
+                access="global">
+    <!--Summary price of all bills-->
+    <aura:attribute name="summary" type="Decimal"/>
+    <!--Init handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!--Update record event handler-->
+    <aura:handler event="c:recordUpdated" action="{!c.doInit}"/>
+
+    <!--Main body-->
+    <lightning:card iconName="standard:topic2" title="Suma wydatków">
+        <div class="slds-card__body slds-card__body_inner">
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_col-bordered">
+                <thead>
+                <tr class="slds-text-title_caps">
+                    <th scope="col">
+                        <div class="slds-truncate">Suma wydatków</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate">
+                            <ui:outputCurrency aura:id="summaryPrice" value="{!v.summary}"/>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </lightning:card>
+</aura:component>

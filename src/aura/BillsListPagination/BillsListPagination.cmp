@@ -1,0 +1,99 @@
+<aura:component controller="BillController"
+                implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId"
+                access="global">
+
+    <!--Init component-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <!--Attribute for modal dialog window for editing records-->
+    <aura:attribute name="showDialog" type="String" default="false"/>
+    <aura:attribute name="toggleNewRecordModal" type="Boolean" default="{!false}"/>
+
+    <!--Rest of attributes-->
+    <aura:attribute name="Bills" type="Bill__c[]"/>
+    <aura:attribute name="page" type="integer" description="using for store page Number"/>
+    <aura:attribute name="pages" type="integer" description="using for store All Pages page Number"/>
+    <aura:attribute name="total" type="integer" description="total records count store "/>
+
+    <!--Attributes for editing record-->
+    <aura:attribute name="remoteRecordId" type="Id"/>
+    <aura:handler event="c:recordUpdated" action="{!c.doInit}"/>
+
+    <!--Component events for showin/hiding spinner-->
+    <aura:registerEvent name="showSpinner" type="c:showSpinner"/>
+    <aura:registerEvent name="hideSpinner" type="c:hideSpinner"/>
+
+    <!--Next/prev buttons flag for disable/enabele-->
+    <aura:attribute name="nextButton" type="Boolean" default="false"/>
+    <aura:attribute name="prevButton" type="Boolean" default="true"/>
+
+    <!--Main list body-->
+    <lightning:card title="Lista wszystkich rachunków" iconName="standard:event">
+        <aura:set attribute="actions">
+            <lightning:button label="Nowy" onclick="{!c.newRecord}"/>
+        </aura:set>
+        <div class="slds-card__body slds-card__body_inner">
+            <div class="slds-p-left--medium slds-p-right--medium">
+                <div class="slds-grid">
+                    <div class="slds-size--10-of-12">
+                        <p class="slds-page-header__detail slds-truncate">{!v.total} Rachunków • Strona {!v.page}
+                            / {!v.pages}</p>
+                        <!--Pagination buttons-->
+                        <lightning:buttonIcon aura:id="firstbtn" onclick="{!c.changePage}" disabled="{!v.prevButton}"
+                                              iconName="utility:left" alternativeText="Pierwsza strona"
+                                              title="Pierwsza strona" size="medium" variant="border"/>
+                        <lightning:buttonIcon aura:id="prevbtn" onclick="{!c.changePage}" disabled="{!v.prevButton}"
+                                              iconName="utility:chevronleft" alternativeText="Poprzednia strona"
+                                              title="Poprzednia strona" size="medium" variant="border"/>
+                        <lightning:buttonIcon aura:id="nextbtn" onclick="{!c.changePage}" disabled="{!v.nextButton}"
+                                              iconName="utility:chevronright" alternativeText="Następna strona"
+                                              title="Następna strona" size="medium" variant="border"/>
+                        <lightning:buttonIcon aura:id="lastbtn" onclick="{!c.changePage}" disabled="{!v.nextButton}"
+                                              iconName="utility:right" alternativeText="Ostatnia strona"
+                                              title="Ostatnia strona" size="medium" variant="border"/>
+                    </div>
+                    <div class="slds-size--2-of-12">
+                        <lightning:select aura:id="recordSize"
+                                          name="Rekordów na stronę"
+                                          label="Rekordów na stronę"
+                                          value="5"
+                                          onchange="{!c.changePage}">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </lightning:select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Iteration based on Bill object from apex controller-->
+        <div class="slds-card__body slds-card__body_inner">
+            <div class="slds-p-left--medium slds-p-right--medium">
+                <ul class="slds-list--vertical slds-has-dividers--top-space">
+                    <aura:iteration items="{!v.Bills}" var="bill">
+                        <!-- BILL ITEM -->
+                        <li class="slds-list__item">
+                            <c:BillItem remoteRecordId="{!v.remoteRecordId}" billId="{!bill.Id}"
+                                        showDialog="{!v.showDialog}"/>
+                        </li>
+                    </aura:iteration>
+                </ul>
+            </div>
+            <!--Simple footer-->
+            <aura:set attribute="footer">
+                <lightning:badge label="{!v.userName}"/>
+            </aura:set>
+
+            <!--Edit record component-->
+            <c:BillEditRecordComponent showDialog="{!v.showDialog}" remoteRecordId="{!v.remoteRecordId}"/>
+
+            <!--New record component-->
+            <c:strike_modal title="Dodaj nowy rachunek" secondaryButtonLabel="Anuluj" primaryButtonLabel="Zapisz"
+                            showModal="{!v.toggleNewRecordModal}">
+                <c:BillCreateNew />
+            </c:strike_modal>
+        </div>
+    </lightning:card>
+
+</aura:component>

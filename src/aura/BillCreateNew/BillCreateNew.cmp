@@ -1,0 +1,40 @@
+<aura:component controller="BillController" implements="force:hasRecordId"
+                access="global">
+    <aura:attribute name="bill" type="Bill__c"/>
+    <aura:attribute name="avaibleStatuses" type="String[]"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+
+    <div class="slds-size--1-of-1 slds-p-horizontal--x-small">
+        <lightning:input aura:id="billName" name="billName" label="Nazwa rachunku" required="true"
+                         value="{!v.bill.Name}"
+                         class="slds-size--1-of-1 slds-p-horizontal--x-small"/>
+
+        <div class="slds-size--1-of-2 slds-p-horizontal--x-small">
+            <ui:inputCurrency aura:id="billPrice" label="Kwota"
+                              class="slds-input"
+                              value="{!v.bill.Price__c}"/>
+
+        </div>
+
+        <div class="slds-size--1-of-2 slds-p-horizontal--x-small">
+            <lightning:select aura:id="billStatus" name="select" label="Status rachunku" required="true"
+                              value="{!v.bill.Status__c}"
+                              class="slds-size--1-of-2 slds-p-horizontal--x-small">
+                <aura:iteration items="{!v.avaibleStatuses}" var="stat">
+                    <option value="{!stat}" text="{!stat}"></option>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        
+        <div class="slds-size--1-of-1 slds-p-horizontal--x-small">
+            <c:strike_textarea aura:id="billDescription"
+                               label="Opis"
+                               size="medium"
+                               errorMessage="Zły wpis"
+                               value="{!v.bill.Description__c}"/>
+        </div>
+    </div>
+
+</aura:component>
