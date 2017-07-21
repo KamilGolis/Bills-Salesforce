@@ -1,0 +1,7 @@
+.THIS .icon {
+    opacity: 0.2;
+}
+
+.THIS .icon:hover {
+    opacity: 1.0;
+}

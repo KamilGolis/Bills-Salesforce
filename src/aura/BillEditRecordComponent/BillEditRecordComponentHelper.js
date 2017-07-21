@@ -14,13 +14,20 @@
     //Info window - toast - on top of page when record is saved
     showInfo : function (component, event, helper) {
         var toastEvent = $A.get("e.force:showToast");
-        toastEvent.setParams({
-            "title": "Sukces!",
-            "message": 'Zaktualizowaliśmy rachunek : ' + component.get('v.selectedBill.fields.Name.value')
-            + '\r\n Kwota : ' + component.get('v.selectedBill.fields.Price__c.value')
-            + '\r\n Status płatności : ' + component.get('v.selectedBill.fields.Status__c.value'),
-            "type": "success"
-        });
-        toastEvent.fire();
+        if(toastEvent){
+			toastEvent.setParams({
+            	"title": "Sukces!",
+            	"message": 'Zaktualizowaliśmy rachunek : ' + component.get('v.selectedBill.fields.Name.value')
+            	+ '\r\n Kwota : ' + component.get('v.selectedBill.fields.Price__c.value')
+            	+ '\r\n Status płatności : ' + component.get('v.selectedBill.fields.Status__c.value'),
+            	"type": "success"
+        	});
+        	toastEvent.fire();
+        } else {
+            alert('Zaktualizowaliśmy rachunek : ' + component.get('v.selectedBill.fields.Name.value')
+            	+ '\r\n Kwota : ' + component.get('v.selectedBill.fields.Price__c.value')
+            	+ '\r\n Status płatności : ' + component.get('v.selectedBill.fields.Status__c.value'));
+        }
+
     }
 })

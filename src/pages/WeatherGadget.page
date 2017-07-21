@@ -1,0 +1,28 @@
+<!--
+ - Created by trot on 17.07.17.
+ -->
+<apex:page showHeader="false" standardStylesheets="false" id="WeatherGadget">
+    <apex:stylesheet value="{!URLFOR($Resource.SLDS2_3_2, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+    <apex:includeLightning />
+
+    <div style="width:100%;height:100px;" id="lexContainer">
+        <div style="height:6rem;" id="weatherContainer">
+            <div role="status" class="slds-spinner slds-spinner_medium" >
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $Lightning.use("c:WeatherApp", function() {
+            $Lightning.createComponent("c:WeatherComponent",
+                    {},
+                    "lexContainer",
+                    function(cmp) {
+                        document.getElementById("weatherContainer").style.display = 'none';
+                    });
+        });
+    </script>
+</apex:page>

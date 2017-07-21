@@ -15,41 +15,70 @@
                       targetFields="{!v.targetFields}"
                       fields="Name, Status__c, Price__c, Pay_Date__c, Category__c, Loan_Holder__r.Name, Description__c"/>
 
-    <!--Main body-->
-    <div class="slds-media">
-        <div class="slds-media__figure">
-            <!--Icon goes here-->
-            <!--<img src="{!v.targetFields.Thumbnail__c}" class="slds-avatar&#45;&#45;large slds-avatar&#45;&#45;circle" alt="{!v.targetFields.Title_c}" />-->
+    <div class="slds-grid slds-grid_vertical-stretch">
+        <div class="slds-col slds-size--3-of-12">
+            <div class="slds-text-heading_small">{!v.targetFields.Pay_Date__c}</div>
+            <div class="slds-text-heading_small"><ui:outputCurrency value="{!v.targetFields.Price__c}"/></div>
+            <lightning:badge label="{!v.targetFields.Status__c}"/>
         </div>
-        <div class="slds-media__body">
-            <div class="slds-grid">
-                <a onclick="{!c.editRecord}">
-                    <h3 class="slds-text-heading--small slds-m-bottom--xx-small">{!v.targetFields.Name}</h3>
-                </a>
-                <lightning:buttonIcon iconName="utility:edit" class="slds-col--bump-left" variant="bare"
-                                      alternativeText="Edytuj" onclick="{!c.editRecord}"/>
+        <div class="slds- col slds-size--8-of-12">
+            <lightning:tile label="{!v.targetFields.Name}" href="">
+                <aura:set attribute="body">
+                    <p>{!v.targetFields.Loan_Holder__r.Name}</p>
+                    <p>{!v.targetFields.Description__c}</p>
+                </aura:set>
+                <aura:set attribute="media">
+                    <!--<lightning:icon title="Icon Title" iconName="utility:tile_card_list" size="medium"/>-->
+                </aura:set>
+            </lightning:tile>
+        </div>
+        <div class="slds-col slds-size--1-of-12">
+            <div class="slds-clearfix">
+                <div class="slds-float_right">
+                    <lightning:buttonIcon iconName="utility:edit" class="slds-col--bump-left" variant="bare"
+                                          alternativeText="Edytuj" onclick="{!c.editRecord}"/>
+                </div>
             </div>
-            <!--Detail body-->
-            <div aura:id="billDetail" class="slds-m-top--small">
-                <ul class="slds-grid slds-wrap">
-                    <li class="slds-list__item slds-size--1-of-3"><span
-                            class="slds-text-color--weak slds-m-right--small">Status:</span> {!v.targetFields.Status__c}
-                    </li>
-                    <li class="slds-list__item slds-size--1-of-3"><span
-                            class="slds-text-color--weak slds-m-right--small">Kwota:</span>
-                        <ui:outputCurrency value="{!v.targetFields.Price__c}"/>
-                    </li>
-                    <li class="slds-list__item slds-size--1-of-3"><span
-                            class="slds-text-color--weak slds-m-right--small">Data płatności:</span> {!v.targetFields.Pay_Date__c}
-                    </li>
-                    <li class="slds-list__item slds-size--1-of-3"><span
-                            class="slds-text-color--weak slds-m-right--small">Wierzyciel:</span> {!v.targetFields.Loan_Holder__r.Name}
-                    </li>
-                    <li class="slds-list__item slds-size--1-of-3"><span
-                            class="slds-text-color--weak slds-m-right--small">Opis:</span> {!v.targetFields.Description__c}
-                    </li>
-                </ul>
-            </div>
+
         </div>
     </div>
+
+
+    <!--Main body-->
+    <!--<div class="slds-media">-->
+    <!--<div class="slds-media__figure">-->
+    <!--&lt;!&ndash;Icon goes here&ndash;&gt;-->
+    <!--&lt;!&ndash;<img src="{!v.targetFields.Thumbnail__c}" class="slds-avatar&#45;&#45;large slds-avatar&#45;&#45;circle" alt="{!v.targetFields.Title_c}" />&ndash;&gt;-->
+    <!--</div>-->
+    <!--<div class="slds-media__body">-->
+    <!--<div class="slds-grid">-->
+    <!--<a onclick="{!c.editRecord}">-->
+    <!--<h3 class="slds-text-heading&#45;&#45;small slds-m-bottom&#45;&#45;xx-small">{!v.targetFields.Name}</h3>-->
+    <!--</a>-->
+    <!--<lightning:buttonIcon iconName="utility:edit" class="slds-col&#45;&#45;bump-left" variant="bare"-->
+    <!--alternativeText="Edytuj" onclick="{!c.editRecord}"/>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;Detail body&ndash;&gt;-->
+    <!--<div aura:id="billDetail" class="slds-m-top&#45;&#45;small">-->
+    <!--<ul class="slds-grid slds-wrap">-->
+    <!--<li class="slds-list__item slds-size&#45;&#45;1-of-3"><span-->
+    <!--class="slds-text-color&#45;&#45;weak slds-m-right&#45;&#45;small">Status:</span> {!v.targetFields.Status__c}-->
+    <!--</li>-->
+    <!--<li class="slds-list__item slds-size&#45;&#45;1-of-3"><span-->
+    <!--class="slds-text-color&#45;&#45;weak slds-m-right&#45;&#45;small">Kwota:</span>-->
+    <!--<ui:outputCurrency value="{!v.targetFields.Price__c}"/>-->
+    <!--</li>-->
+    <!--<li class="slds-list__item slds-size&#45;&#45;1-of-3"><span-->
+    <!--class="slds-text-color&#45;&#45;weak slds-m-right&#45;&#45;small">Data płatności:</span> {!v.targetFields.Pay_Date__c}-->
+    <!--</li>-->
+    <!--<li class="slds-list__item slds-size&#45;&#45;1-of-3"><span-->
+    <!--class="slds-text-color&#45;&#45;weak slds-m-right&#45;&#45;small">Wierzyciel:</span> {!v.targetFields.Loan_Holder__r.Name}-->
+    <!--</li>-->
+    <!--<li class="slds-list__item slds-size&#45;&#45;1-of-3"><span-->
+    <!--class="slds-text-color&#45;&#45;weak slds-m-right&#45;&#45;small">Opis:</span> {!v.targetFields.Description__c}-->
+    <!--</li>-->
+    <!--</ul>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
 </aura:component>

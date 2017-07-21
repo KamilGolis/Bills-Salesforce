@@ -22,12 +22,16 @@
     <!--Rest of app layout-->
     <div>
         <lightning:layout class="slds-is-relative">
-            <lightning:layoutItem size="9" flexibility="auto" padding="around-small">
+            <lightning:layoutItem size="7" flexibility="auto" padding="around-small">
                 <c:BillsListPagination />
             </lightning:layoutItem>
 
-            <lightning:layoutItem size="4" flexibility="auto" padding="around-small">
+            <lightning:layoutItem size="3" flexibility="auto" padding="around-small">
                 <c:BillSummary />
+            </lightning:layoutItem>
+            
+			<lightning:layoutItem size="2" flexibility="auto" padding="around-small">
+                <c:WeatherComponent />
             </lightning:layoutItem>
         </lightning:layout>
 

@@ -1,0 +1,91 @@
+<!--
+ - Created by trot on 17.07.17.
+ -->
+
+<aura:component description="WeatherComponent" controller="Weather"
+                implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId"
+                access="global">
+
+    <!--Default location from geolocation-->
+    <aura:attribute name="Lat" type="Double"/>
+    <aura:attribute name="Lon" type="Double"/>
+    <!--Options value stored in DB or record-->
+    <aura:attribute name="IPlocation" type="Boolean" default="true"/>
+    <!--Options value temporaty for binding checkbox, saved to above when OK pressed-->
+    <aura:attribute name="IPlocationTemp" type="Boolean" default="true"/>
+    <!--Weather from controller-->
+    <aura:attribute name="Weather" type="Object"/>
+    <!--Modal window on/off-->
+    <aura:attribute name="ShowModal" type="Boolean" default="false"/>
+
+    <!--Init handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!--Modal OK button click event-->
+    <aura:handler name="strike_evt_modalPrimaryButtonClicked" event="c:strike_evt" action="{!c.okClick}"/>
+    <!--Manage checkbox value to show/hide select box-->
+    <aura:handler name="change" value="{!v.IPlocationTemp}" action="{!c.selectBoxVisibility}"/>
+
+    <div class="slds-box slds-size--1-of-1">
+        <div class="slds-float_right">
+            <lightning:buttonIcon iconName="utility:edit" class="slds-col--bump-left icon" variant="bare"
+                                  alternativeText="Ustawienia" onclick="{!c.editSettings}"/>
+        </div>
+        <c:strike_tile variant="icon"
+                       title="Pogoda na dziś"
+                       subtitle="{!v.Weather.cityName}"
+                       link="https://openweathermap.org/"
+                       iconName="custom:custom60"/>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-size_1-of-1">
+                <div class="slds-text-title_caps"><p>{!v.Weather.description}</p></div>
+            </div>
+            <div class="slds-size_1-of-2">
+                <p>Temperatura :</p>
+            </div>
+            <div class="slds-size_1-of-2">
+                <p>{!v.Weather.temperature} st.C</p>
+            </div>
+            <div class="slds-size_1-of-2">
+                <p>Ciśnienie :</p>
+            </div>
+            <div class="slds-size_1-of-2">
+                <p>{!v.Weather.pressure} hPa</p>
+            </div>
+            <div class="slds-size_1-of-2">
+                <p>Wilgotność :</p>
+            </div>
+            <div class="slds-size_1-of-2">
+                <p>{!v.Weather.humidity} %</p>
+            </div>
+        </div>
+    </div>
+
+    <c:strike_modal aura:id="settingsModal"
+                    title="Ustawienia"
+                    primaryButtonLabel="Ok"
+                    secondaryButtonLabel="Anuluj"
+                    showHeader="true"
+                    showFooter="true"
+                    showModal="{!v.ShowModal}">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-size_1-of-1">
+                <lightning:input type="checkbox" aura:id="optionIP" label="Lokalizacja po adresie IP?" name="IP"
+                                 checked="{!v.IPlocationTemp}"/>
+            </div>
+            <div class="slds-size_1-of-1" style="height: 250px;">
+                <c:strike_select value="Warszawa"
+                                 aura:id="selectCity"
+                                 label="Wybierz miasto"
+                                 placeholder="W jakim jeste miecie?"
+                                 errorMessage="Zły wpis">
+                    <c:strike_option label="Warszawa" iconName="utility:location" value="Warszawa"/>
+                    <c:strike_option label="Łódź" iconName="utility:location" value="Łódź"/>
+                    <c:strike_option label="Poznań" iconName="utility:location" value="Poznań"/>
+                    <c:strike_option label="Wrocław" iconName="utility:location" value="Wrocław"/>
+                    <c:strike_option label="Kraków" iconName="utility:location" value="Kraków"/>
+                    <c:strike_option label="Gdańsk" iconName="utility:location" value="Gdańsk"/>
+                </c:strike_select>
+            </div>
+        </div>
+    </c:strike_modal>
+</aura:component>
