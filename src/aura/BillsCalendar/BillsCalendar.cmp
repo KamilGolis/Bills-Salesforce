@@ -1,0 +1,39 @@
+<!--
+ - Created by trot on 26.07.17.
+ -->
+
+<aura:component description="BillsCalendar"
+                implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+                access="global" controller="BillsCalendarController">
+    <ltng:require scripts="{!join(',', $Resource.AnyEventCal + '/moment.min.js',
+                    $Resource.AnyEventCal + '/moment-timezone.min.js',
+                    $Resource.AnyEventCal + '/jquery.min.js',
+                    $Resource.AnyEventCal + '/fullcalendar.min.js')}"
+            afterScriptsLoaded="{!c.renderCalendar}"/>
+    <ltng:require styles="{!$Resource.AnyEventCal + '/fullcalendar.min.css'}"/>
+
+    <aura:attribute name="bills" type="Map"/>
+    <aura:attribute name="allBills" type="Map"/>
+
+    <aura:attribute name="calendarButtons" type="String"/>
+    <aura:attribute name="weekends" type="Boolean" default="true"/>
+    <aura:attribute name="eventBackgroundColor" type="String"/>
+    <aura:attribute name="eventBorderColor" type="String"/>
+    <aura:attribute name="eventTextColor" type="String"/>
+    <aura:attribute name="idVal" type="String"/>
+    <aura:attribute name="newOrEdit" type="String" default="New"/>
+    <aura:attribute name="month" type="Integer"/>
+    <aura:attribute name="billsBackgroundColor" type="String"/>
+    <aura:attribute name="billsBorderColor" type="String"/>
+    <aura:attribute name="billsTextColor" type="String"/>
+
+    <aura:handler name="change" value="{!v.bills}" action="{!c.renderCalendar}"/>
+    <aura:handler name="change" value="{!v.allBills}" action="{!c.collectionChanged}"/>
+
+    <aura:registerEvent name="monthChanged" type="c:BillsMonthChanged"/>
+
+    <aura:registerEvent name="showSpinner" type="c:showSpinner"/>
+    <aura:registerEvent name="hideSpinner" type="c:hideSpinner"/>
+
+    <div id="calendar" class="anyCalendar"></div>
+</aura:component>

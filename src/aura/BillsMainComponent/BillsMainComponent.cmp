@@ -1,0 +1,58 @@
+<aura:component
+        implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:appHostable"
+        access="global"
+        controller="BillsCalendarController">
+    <!--Handlers for spinner events-->
+    <aura:handler name="showSpinner" event="c:showSpinner" action="{!c.showSpinner}"/>
+    <aura:handler name="hideSpinner" event="c:hideSpinner" action="{!c.hideSpinner}"/>
+
+    <!--Handler for update of a record-->
+    <aura:handler name="recordUpdated" event="c:recordUpdated" action="{!c.updateContent}"/>
+
+    <!--Init component handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <!--Main data/content holder-->
+    <aura:attribute name="bills" type="Bill__c[]"/>
+    <aura:attribute name="gotBills" type="Boolean" default="false"/>
+
+    <!--Spinner on/off flag-->
+    <aura:attribute name="spinner" type="boolean" default="true"/>
+
+    <!--Design params-->
+    <aura:attribute name="calendarButtons" type="String"/>
+    <aura:attribute name="weekends" type="Boolean" default="true"/>
+    <aura:attribute name="eventBackgroundColor" type="String" default="#CFEBFE"/>
+    <aura:attribute name="eventBorderColor" type="String" default="#ffffff"/>
+    <aura:attribute name="eventTextColor" type="String" default="#00396b"/>
+
+    <!--loading spinner start... style=Brand Medium (blue dots)-->
+    <aura:if isTrue="{!v.spinner}">
+        <lightning:spinner variant="brand" size="large"/>
+    </aura:if>
+    <!-- Loading spinner end-->
+
+    <!--Handler for month change event fired in calendar-->
+    <aura:handler name="monthChanged" event="c:BillsMonthChanged" action="{!c.monthChanged}"/>
+
+    <!--Rest of app layout-->
+    <div>
+        <lightning:layout class="slds-is-relative">
+            <lightning:layoutItem size="5" flexibility="auto" padding="around-small">
+                <aura:if isTrue="{!v.gotBills}">
+                    <c:BillsListPagination allBills="{!v.bills}"/>
+                </aura:if>
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="7" flexibility="auto" padding="around-small">
+                <aura:if isTrue="{!v.gotBills}">
+                    <c:BillsCalendar allBills="{!v.bills}"
+                                     billsBackgroundColor="{!v.eventBackgroundColor}"
+                                     billsBorderColor="{!eventBorderColor}"
+                                     billsTextColor="{!v.eventTextColor}"/>
+                </aura:if>
+            </lightning:layoutItem>
+        </lightning:layout>
+
+    </div>
+</aura:component>

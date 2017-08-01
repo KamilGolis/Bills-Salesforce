@@ -1,0 +1,7 @@
+<design:component label="Bills App">
+    <design:attribute name="calendarButtons" label="Buttons shown on Calendar" datasource="apex://MyCalendarButtonsPicklist"/>
+    <design:attribute name="weekends" label="Display Weekends" description="Whether to include Saturday/Sunday columns in any of the calendar views"/>
+    <design:attribute name="eventBackgroundColor" label="Background Color of Event" description="Background Color of Event displayed on Calendar"/>
+    <design:attribute name="eventBorderColor" label="Border Color of Event" description="Border Color of Event displayed on Calendar"/>
+    <design:attribute name="eventTextColor" label="Text Color of Event" description="Text Color of Event displayed on Calendar"/>
+</design:component>

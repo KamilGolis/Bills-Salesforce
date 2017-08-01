@@ -2,6 +2,8 @@
                 implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId"
                 access="global">
 
+    <ltng:require scripts="{!join(',',  $Resource.AnyEventCal + '/jquery.min.js')}"/>
+
     <!--Init component-->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
 
@@ -10,14 +12,19 @@
     <aura:attribute name="toggleNewRecordModal" type="Boolean" default="{!false}"/>
 
     <!--Rest of attributes-->
-    <aura:attribute name="Bills" type="Bill__c[]"/>
+    <!--Holds temporary bill list sliced by page and record count-->
+    <aura:attribute name="bills" type="Bill__c[]"/>
+    <!--Base array of bills - read only-->
+    <aura:attribute name="allBills" type="Bill__c[]"/>
     <aura:attribute name="page" type="integer" description="using for store page Number"/>
     <aura:attribute name="pages" type="integer" description="using for store All Pages page Number"/>
     <aura:attribute name="total" type="integer" description="total records count store "/>
 
     <!--Attributes for editing record-->
     <aura:attribute name="remoteRecordId" type="Id"/>
-    <aura:handler event="c:recordUpdated" action="{!c.doInit}"/>
+    <!--Fire event when record is updated-->
+    <!--<aura:handler event="c:recordUpdated" action="{!c.doInit}"/>-->
+    <aura:registerEvent name="recordUpdated" type="c:recordUpdated"/>
 
     <!--Component events for showin/hiding spinner-->
     <aura:registerEvent name="showSpinner" type="c:showSpinner"/>
@@ -26,6 +33,9 @@
     <!--Next/prev buttons flag for disable/enabele-->
     <aura:attribute name="nextButton" type="Boolean" default="false"/>
     <aura:attribute name="prevButton" type="Boolean" default="true"/>
+
+    <!--Handler for changing base data in collection-->
+    <aura:handler name="change" value="{!v.allBills}" action="{!c.doInit}"/>
 
     <!--Main list body-->
     <lightning:card title="Lista wszystkich rachunków" iconName="standard:event">
@@ -71,7 +81,7 @@
         <div class="slds-card__body slds-card__body_inner">
             <div class="slds-p-left--medium slds-p-right--medium">
                 <ul class="slds-list--vertical slds-has-dividers--top-space">
-                    <aura:iteration items="{!v.Bills}" var="bill">
+                    <aura:iteration items="{!v.bills}" var="bill">
                         <!-- BILL ITEM -->
                         <li class="slds-list__item">
                             <c:BillItem remoteRecordId="{!v.remoteRecordId}" billId="{!bill.Id}"
@@ -91,7 +101,7 @@
             <!--New record component-->
             <c:strike_modal title="Dodaj nowy rachunek" secondaryButtonLabel="Anuluj" primaryButtonLabel="Zapisz"
                             showModal="{!v.toggleNewRecordModal}">
-                <c:BillCreateNew />
+                <c:BillCreateNew/>
             </c:strike_modal>
         </div>
     </lightning:card>

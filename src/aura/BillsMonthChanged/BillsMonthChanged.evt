@@ -1,0 +1,7 @@
+<!--
+ - Created by trot on 01.08.17.
+ -->
+
+<aura:event type="COMPONENT" description="BillsMonthChanged">
+    <aura:attribute name="month" type="Integer"/>
+</aura:event>
