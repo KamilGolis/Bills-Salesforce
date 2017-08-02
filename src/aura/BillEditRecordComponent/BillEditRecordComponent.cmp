@@ -13,7 +13,9 @@
     <aura:handler name="change" value="{!v.showDialog}" action="{!c.toggleDialog}"/>
     <!--Handler for event fired when record is edited and saved-->
     <aura:handler name="change" value="{!v.remoteRecordId}" action="{!c.getRecord}"/>
-    
+    <!--Register update record event-->
+    <aura:registerEvent name="recordUpdated" type="c:recordUpdated"/>
+
     <!--Main implementation of recordData-->
     <force:recordData aura:id="editRecord"
                       targetRecord="{!v.selectedBill}"

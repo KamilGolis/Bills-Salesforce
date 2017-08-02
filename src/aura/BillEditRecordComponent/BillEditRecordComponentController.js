@@ -39,10 +39,10 @@
 
         var tempRec = component.find("editRecord");
         tempRec.saveRecord($A.getCallback(function (result) {
-            console.log(result.state);
             if (result.state === "SUCCESS" || result.state === "DRAFT") {
                 var event = $A.get("e.c:recordUpdated");
-                event.setParams({"Id": component.get("v.selectedBill.fields.Id.value")});
+                // event.setParams({"Id": component.get("v.selectedBill.fields.Id.value")});
+                event.setParams({"Bill": component.get("v.selectedBill")});
                 event.fire();
             } else if (result.state === "ERROR") {
                 console.log("ERROR: " + JSON.stringify(result.error));

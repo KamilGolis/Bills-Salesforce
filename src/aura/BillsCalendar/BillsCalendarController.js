@@ -18,7 +18,7 @@
                     description: value.description,
                     owner: value.owner
                 }
-                console.log(newBill);
+                // console.log(newBill);
                 billsArray.push(newBill);
             });
             var calendarButtons = component.get('v.calendarButtons');
@@ -37,6 +37,10 @@
                 eventBorderColor: component.get('v.billsBorderColor'),
                 eventTextColor: component.get('v.billsTextColor'),
                 events: billsArray,
+                eventClick: function(calEvent, jsEvent, view) {
+                    component.set("v.remoteRecordId", calEvent.id);
+                    component.set("v.editRecord", true);
+                },
                 viewRender: function (view, element) {
                     component.getEvent("showSpinner").fire();
                     var month = $('#calendar').fullCalendar('getDate').format("M");
@@ -49,7 +53,6 @@
         });
     },
     collectionChanged: function (component, event, helper) {
-        console.log("Changing collection in calendar");
         $('#calendar').fullCalendar('removeEvents');
         helper.getBills(component);
         var billsArray = [];

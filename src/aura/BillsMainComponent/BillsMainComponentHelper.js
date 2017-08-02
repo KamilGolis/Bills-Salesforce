@@ -3,6 +3,7 @@
     getBills: function (component, month) {
         if (!month) {
             month = new Date().getMonth() + 1;
+            component.set("v.month", month);
         }
         var action = component.get("c.getBillsByMonth");
         action.setParams({"month": month});
@@ -11,7 +12,6 @@
 
             if (state === "SUCCESS") {
                 //For debug
-                console.log("Getting bills from server.");
                 component.set("v.bills", response.getReturnValue());
                 component.set("v.gotBills", true);
 

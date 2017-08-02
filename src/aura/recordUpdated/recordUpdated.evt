@@ -1,3 +1,4 @@
 <aura:event type="APPLICATION" description="Event template">
-     <aura:attribute name="Id" type="Id"/>
+     <!--<aura:attribute name="Id" type="Id"/>-->
+     <aura:attribute name="Bill" type="Bill__c"/>
 </aura:event>

@@ -7,7 +7,7 @@
     <aura:handler name="hideSpinner" event="c:hideSpinner" action="{!c.hideSpinner}"/>
 
     <!--Handler for update of a record-->
-    <aura:handler name="recordUpdated" event="c:recordUpdated" action="{!c.updateContent}"/>
+    <aura:handler event="c:recordUpdated" action="{!c.updateContent}"/>
 
     <!--Init component handler-->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
@@ -35,6 +35,9 @@
     <!--Handler for month change event fired in calendar-->
     <aura:handler name="monthChanged" event="c:BillsMonthChanged" action="{!c.monthChanged}"/>
 
+    <!--Current month-->
+    <aura:attribute name="month" type="Integer"/>
+
     <!--Rest of app layout-->
     <div>
         <lightning:layout class="slds-is-relative">
@@ -49,7 +52,8 @@
                     <c:BillsCalendar allBills="{!v.bills}"
                                      billsBackgroundColor="{!v.eventBackgroundColor}"
                                      billsBorderColor="{!eventBorderColor}"
-                                     billsTextColor="{!v.eventTextColor}"/>
+                                     billsTextColor="{!v.eventTextColor}"
+                                     month="{!v.month}"/>
                 </aura:if>
             </lightning:layoutItem>
         </lightning:layout>
