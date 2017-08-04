@@ -41,6 +41,13 @@
                     component.set("v.remoteRecordId", calEvent.id);
                     component.set("v.editRecord", true);
                 },
+                eventDrop: function(event, delta, revertFunc) {
+                    var id = event.id;
+                    var newDate = moment(event.start._i).add(delta).format();
+                    component.set("v.remoteRecordId", id);
+                    component.set("v.editRecord", false);
+                    component.find("editRecordComponent").saveDate(newDate);
+                },
                 viewRender: function (view, element) {
                     component.getEvent("showSpinner").fire();
                     var month = $('#calendar').fullCalendar('getDate').format("M");

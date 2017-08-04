@@ -27,7 +27,6 @@
     <aura:attribute name="billsBorderColor" type="String"/>
     <aura:attribute name="billsTextColor" type="String"/>
 
-    <aura:handler name="change" value="{!v.bills}" action="{!c.renderCalendar}"/>
     <aura:handler name="change" value="{!v.allBills}" action="{!c.collectionChanged}"/>
 
     <aura:registerEvent name="monthChanged" type="c:BillsMonthChanged"/>
@@ -40,6 +39,6 @@
 
     <div id="calendar" class="anyCalendar"></div>
 
-    <c:BillEditRecordComponent showDialog="{!v.editRecord}" remoteRecordId="{!v.remoteRecordId}"/>
+    <c:BillEditRecordComponent aura:id="editRecordComponent" showDialog="{!v.editRecord}" remoteRecordId="{!v.remoteRecordId}"/>
 
 </aura:component>

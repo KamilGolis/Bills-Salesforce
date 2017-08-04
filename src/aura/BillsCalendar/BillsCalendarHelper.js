@@ -6,5 +6,4 @@
         var month = component.get("v.month");
         component.set("v.bills", component.get("v.allBills"));
     }
-
 })

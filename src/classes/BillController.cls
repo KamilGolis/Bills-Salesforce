@@ -48,12 +48,33 @@ public with sharing class BillController {
     public static BillDetailWrapper getBillDetail(Id billId) {
         BillDetailwrapper obj = new BillDetailWrapper();
         obj.statuses = getStatuses(billId);
+        Bill__c bill = getBillById(billId);
+        obj.currentStatus = bill.Status__c;
+        obj.currentLoanHolderName = bill.Loan_Holder__r.Name;
         return obj;
+    }
+
+    @AuraEnabled
+    public static Bill__c getBillById(Id id) {
+        List<Bill__c> bills = [
+                SELECT Id, Name, Category__c, Status__c, Pay_Date__c, Price__c, Description__c, Loan_Holder__r.Name
+                FROM Bill__c
+                WHERE Id = :id
+        ];
+        Bill__c bill = new Bill__c();
+        if (BillsCalendarController.isAccessible('Bill__c')) {
+            if (!bills.isEmpty()) {
+                return bills[0];
+            }
+        }
+        return null;
     }
 
     public class BillDetailWrapper {
         @AuraEnabled public List<String> statuses { get; set; }
         @AuraEnabled public List<String> loanHolderName { get; set; }
+        @AuraEnabled public String currentStatus { get; set; }
+        @AuraEnabled public String currentLoanHolderName { get; set; }
     }
 
     private static List<String> getStatuses(Id billId) {

@@ -7,6 +7,7 @@
     <aura:attribute name="remoteRecordId" type="Id"/>
     <!--Selected bill based on recived ID-->
     <aura:attribute name="selectedBill" type="Bill__c"/>
+    <aura:attribute name="billsFields" type="Bill__c"/>
     <!--List of all avaible statuses-->
     <aura:attribute name="avaibleStatuses" type="String[]"/>
     <!--Handler for showing modal window-->
@@ -16,11 +17,20 @@
     <!--Register update record event-->
     <aura:registerEvent name="recordUpdated" type="c:recordUpdated"/>
 
+    <aura:method name="saveDate" action="{!c.saveDate}"
+                 description="Save record based on its ID without modal prompt window">
+        <!--<aura:attribute name="id" type="Id" default="record Id"/>-->
+        <aura:attribute name="newDate" type="Date" default="new date for save"/>
+    </aura:method>
+
+
     <!--Main implementation of recordData-->
     <force:recordData aura:id="editRecord"
                       targetRecord="{!v.selectedBill}"
                       fields="Id, Name, Status__c, Price__c, Pay_Date__c, Category__c, Loan_Holder__r.Name, Description__c"
-                      mode="EDIT"/>
+                      targetFields="{!v.billsFields}"
+                      mode="EDIT"
+                      recordUpdated="{!c.recordUpdated}"/>
 
     <!--Main body-->
     <div aura:id="editDialog" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal">
@@ -30,33 +40,33 @@
                     <lightning:icon iconName="utility:close" variant="bare"></lightning:icon>
                     <span class="slds-assistive-text">Close</span>
                 </button>
-                <h2 class="slds-text-heading--medium">Edytuj rachunek : {!v.selectedBill.fields.Name.value}</h2>
+                <h2 class="slds-text-heading--medium">Edytuj rachunek : {!v.billsFields.Name}</h2>
             </div>
             <div class="slds-modal__content slds-p-around--medium slds-grid slds-wrap slds-grid--align-spread">
                 <lightning:input aura:id="billName" name="billName" label="Nazwa rachunku" required="true"
-                                 value="{!v.selectedBill.fields.Name.value}"
+                                 value="{!v.billsFields.Name}"
                                  class="slds-size--1-of-1 slds-p-horizontal--x-small"/>
 
                 <div class="slds-size--1-of-2 slds-p-horizontal--x-small">
                     <ui:inputCurrency aura:id="billPrice" label="Kwota"
                                       class="slds-input"
-                                      value="{!v.selectedBill.fields.Price__c.value}"/>
+                                      value="{!v.billsFields.Price__c}"/>
                 </div>
 
-                    <lightning:select aura:id="billStatus" name="select" label="Status rachunku" required="true"
-                                      value="{!v.selectedBill.fields.Status__c.value}"
-                                      class="slds-size--1-of-2 slds-p-horizontal--x-small">
-                        <aura:iteration items="{!v.avaibleStatuses}" var="stat">
-                            <option value="{!stat}" text="{!stat}"></option>
-                        </aura:iteration>
-                    </lightning:select>
+                <lightning:select aura:id="billStatus" name="select" label="Status rachunku" required="true"
+                                  value="{!v.billsFields.Status__c}"
+                                  class="slds-size--1-of-2 slds-p-horizontal--x-small">
+                    <aura:iteration items="{!v.avaibleStatuses}" var="stat">
+                        <option value="{!stat}" text="{!stat}"></option>
+                    </aura:iteration>
+                </lightning:select>
 
                 <div class="slds-size--1-of-1 slds-p-horizontal--x-small">
                     <c:strike_textarea aura:id="billDescription"
-                            label="Opis"
-                            size="medium"
-                            errorMessage="Zły wpis"
-                            value="{!v.selectedBill.fields.Description__c.value}"/>
+                                       label="Opis"
+                                       size="medium"
+                                       errorMessage="Zły wpis"
+                                       value="{!v.billsFields.Description__c}"/>
                 </div>
             </div>
             <div class="slds-modal__footer">
