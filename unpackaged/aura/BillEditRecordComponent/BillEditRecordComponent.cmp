@@ -1,0 +1,92 @@
+<aura:component description="BillEditRecordComponent" controller="BillController" implements="force:hasRecordId"
+                access="global">
+
+    <!--Attribute flag for modal window on/off-->
+    <aura:attribute name="showDialog" type="String" default="false"/>
+    <!--Editing record ID-->
+    <aura:attribute name="remoteRecordId" type="Id"/>
+    <!--Selected bill based on recived ID-->
+    <aura:attribute name="selectedBill" type="Bill__c"/>
+    <aura:attribute name="billsFields" type="Bill__c"/>
+    <!--List of all avaible statuses-->
+    <aura:attribute name="avaibleStatuses" type="String[]"/>
+    <!--Loan holders list-->
+    <aura:attribute name="loanHolders" type="Loan_Holder__c[]"/>
+    <!--Current loan holder-->
+    <aura:attribute name="currentLoanHolder" type="Loan_Holder__c"/>
+    <!--Handler for showing modal window-->
+    <aura:handler name="change" value="{!v.showDialog}" action="{!c.toggleDialog}"/>
+    <!--Handler for event fired when record is edited and saved-->
+    <aura:handler name="change" value="{!v.remoteRecordId}" action="{!c.getRecord}"/>
+    <!--Register update record event-->
+    <aura:registerEvent name="recordUpdated" type="c:recordUpdated"/>
+
+    <!--Main implementation of recordData-->
+    <force:recordData aura:id="editRecord"
+                      targetRecord="{!v.selectedBill}"
+                      fields="Id, Name, Status__c, Price__c, Pay_Date__c, Category__c, Loan_Holder__c, Description__c"
+                      targetFields="{!v.billsFields}"
+                      mode="EDIT"
+                      recordUpdated="{!c.recordUpdated}"/>
+
+    <!--Main body-->
+    <div aura:id="editDialog" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <button class="slds-button slds-modal__close " title="Close" onclick="{!c.toggleDialog}">
+                    <lightning:icon iconName="utility:close" variant="bare"/>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 class="slds-text-heading--medium">Edytuj rachunek : {!v.billsFields.Name}</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around--medium slds-grid slds-wrap slds-grid--align-spread">
+                <lightning:input aura:id="billName" name="billName" label="Nazwa rachunku" required="true"
+                                 value="{!v.billsFields.Name}"
+                                 class="slds-size--1-of-1 slds-p-horizontal--x-small"/>
+
+                <div class="slds-size--1-of-2 slds-p-horizontal--x-small">
+                    <ui:inputCurrency aura:id="billPrice" label="Kwota"
+                                      class="slds-input"
+                                      value="{!v.billsFields.Price__c}"/>
+                </div>
+
+                <div class="slds-size--1-of-2 slds-p-horizontal--x-small">
+                    <lightning:select aura:id="billStatus" name="select" label="Status rachunku" required="true"
+                                      value="{!v.billsFields.Status__c}">
+                    <aura:iteration items="{!v.avaibleStatuses}" var="stat">
+                        <option value="{!stat}" text="{!stat}"></option>
+                    </aura:iteration>
+                    </lightning:select>
+                </div>
+
+                <div class="slds-size--1-of-2 slds-p-horizontal--x-small">
+                    <lightning:select aura:id="billLoanHolders" name="select" label="Wierzyciel rachunku"
+                                      required="true"
+                                      value="{!v.billsFields.Loan_Holder__c}">
+                    <aura:iteration items="{!v.loanHolders}" var="loan">
+                        <option value="{!loan.Id}" text="{!loan.Name}"></option>
+                    </aura:iteration>
+                    </lightning:select>
+                </div>
+
+                <div class="slds-size--1-of-2 slds-p-horizontal--x-small">
+                    <ui:inputDate value="{!v.billsFields.Pay_Date__c}" label="Data zapłaty" displayDatePicker="true"/>
+                </div>
+
+                <div class="slds-size--1-of-1 slds-p-horizontal--x-small">
+                    <c:strike_textarea aura:id="billDescription"
+                                       label="Opis"
+                                       size="medium"
+                                       errorMessage="Zły wpis"
+                                       value="{!v.billsFields.Description__c}"/>
+                </div>
+            </div>
+            <div class="slds-modal__footer">
+                <button class="slds-button slds-button--neutral" onclick="{!c.toggleDialog}">Anuluj</button>
+                <button class="slds-button slds-button--brand" onclick="{!c.saveRecord}">Zapisz</button>
+            </div>
+        </div>
+    </div>
+    <div aura:id="overlay" class="slds-backdrop"></div>
+
+</aura:component>
