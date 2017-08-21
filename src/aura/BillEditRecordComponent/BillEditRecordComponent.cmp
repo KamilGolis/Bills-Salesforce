@@ -84,8 +84,9 @@
                 </div>
             </div>
             <div class="slds-modal__footer">
-                <button class="slds-button slds-button--neutral" onclick="{!c.toggleDialog}">Anuluj</button>
-                <button class="slds-button slds-button--brand" onclick="{!c.saveRecord}">Zapisz</button>
+                <lightning:button onclick="{!c.deleteRecord}" label="Usuń" variant="destructive" class="slds-float--left slds-float_left"/>
+                <lightning:button onclick="{!c.toggleDialog}" label="Anuluj" variant="neutral"/>
+                <lightning:button onclick="{!c.saveRecord}" label="Zapisz" variant="brand"/>
             </div>
         </div>
     </div>

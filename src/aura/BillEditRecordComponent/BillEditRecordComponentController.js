@@ -32,5 +32,9 @@
             console.log('Error: ' + component.get("v.error"));
         }
 
+    },
+    deleteRecord: function (component, event, helper) {
+        helper.deleteRecord(component, event, helper);
+        helper.showHideModal(component);
     }
 })

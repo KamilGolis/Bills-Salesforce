@@ -15,7 +15,6 @@
         var cmpId = component.get("v.remoteRecordId");
         tempRec.set("v.recordId", cmpId);
         tempRec.reloadRecord();
-        console.log(cmpId);
         var stats = component.get("c.getBillDetail");
         stats.setParams({
             billId: cmpId
@@ -55,6 +54,23 @@
                 console.log("ERROR: " + JSON.stringify(result.error));
             } else {
                 console.log("Unknown problem, state: " + result.state + " error: " + JSON.stringify(result.error));
+            }
+        }));
+    },
+    deleteRecord: function(component, event, helper) {
+        var tempRec = component.find("editRecord");
+        tempRec.deleteRecord($A.getCallback(function(deleteResult) {
+            if (deleteResult.state === "SUCCESS" || deleteResult.state === "DRAFT") {
+                console.log("Record deleted.");
+                 var event = $A.get("e.c:recordUpdated");
+                 event.setParams({"Bill": component.get("v.selectedBill")});
+                 event.fire();
+            } else if (deleteResult.state === "INCOMPLETE") {
+                console.log("User is offline, device doesn't support drafts.");
+            } else if (deleteResult.state === "ERROR") {
+                console.log('Problem deleting record, error: ' + JSON.stringify(deleteResult.error));
+            } else {
+                console.log('Unknown problem, state: ' + deleteResult.state + ', error: ' + JSON.stringify(deleteResult.error));
             }
         }));
     },
