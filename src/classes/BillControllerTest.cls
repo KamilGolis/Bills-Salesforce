@@ -63,6 +63,74 @@ private class BillControllerTest {
 		}
 	}
 
+	@IsTest static void TestGetBillByIdNull() {
+		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User'];
+		User u2 = new User(Alias = 'newUser', Email = 'newtestuser@testorg.com',
+				EmailEncodingKey = 'UTF-8', LastName = 'Testing', LanguageLocaleKey = 'en_US',
+				LocaleSidKey = 'en_US', ProfileId = p.Id,
+				TimeZoneSidKey = 'America/Los_Angeles', UserName = 'newtestuser@testorg.com');
+
+		System.runAs(u2) {
+			List<Bill__c> bills = createTestRecords();
+			System.assertEquals(null, BillController.getBillById('000000000000000000'));
+			System.assertEquals(false, BillController.isAccessible('Bill__c', 'Name'));
+			System.assertEquals(false, BillController.isAccessible('Bill__c', 'Status__c'));
+			System.assertEquals(false, BillController.isAccessible('Bill__c', 'Description__c'));
+			System.assertEquals(false, BillController.isAccessible('Bill__c', 'Pay_Date__c'));
+		}
+	}
+
+	@IsTest static void TestGetDetailOnly() {
+		List<Bill__c> bills = createTestRecords();
+		List<BillController.BillDetailWrapper> billsDetail = new List<BillController.BillDetailWrapper>();
+		for (Bill__c bill : bills) {
+			billsDetail.add(BillController.getDetailOnly());
+		}
+
+		System.assertEquals(bills.size(), billsDetail.size());
+
+		Schema.DescribeFieldResult fieldResult = Bill__c.Status__c.getDescribe();
+		List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
+
+		Integer loanHoldersCount = [SELECT Id, Name FROM Loan_Holder__c].size();
+
+		for (BillController.BillDetailWrapper bill : billsDetail) {
+			System.assertEquals(ple.size(), bill.statuses.size());
+			System.assertEquals(loanHoldersCount, bill.loanHolders.size());
+			System.assertEquals(billsDetail[0].currentStatus, bill.currentStatus);
+			System.assertEquals(billsDetail[0].currentLoanHolder.Name, bill.currentLoanHolder.Name);
+		}
+	}
+
+	@IsTest static void TestGetAllBills() {
+		List<Bill__c> bills = createTestRecords();
+		System.assertEquals(bills.size(), BillController.getAllBills().size());
+	}
+
+	@IsTest static void TestGetBillsByMonth() {
+		List<Bill__c> bills = createTestRecords();
+		Integer month = Date.today().month();
+		List<BillController.BillsWrapper> dbBills = BillController.getBillsByMonth(month);
+
+		System.assertEquals(bills.size(), dbBills.size());
+		for (BillController.BillsWrapper b : dbBills) {
+			System.assertEquals(Date.today(), b.startDateTime);
+			System.assertEquals(Date.today(), b.endDateTime);
+		}
+	}
+
+	@IsTest static void TestGetBillByIdWrapper() {
+		List<Bill__c> bills = createTestRecords();
+		for (Bill__c b : bills) {
+			BillController.BillsWrapper billsWrapper = BillController.getBillByIdWrapper(b.Id);
+			System.assertEquals(b.Id, billsWrapper.Id);
+			System.assertEquals('(' + b.Status__c + ') ' + b.Name, billsWrapper.title);
+			System.assertEquals(b.Description__c, billsWrapper.description);
+			System.assertEquals(b.Pay_Date__c, billsWrapper.startDateTime);
+			System.assertEquals(b.Pay_Date__c, billsWrapper.endDateTime);
+		}
+	}
+
 	//Helper method for creating dummy records
 	static List<Bill__c> createTestRecords() {
 		Bill__c bill = new Bill__c();

@@ -1,6 +1,6 @@
 <aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:appHostable"
         access="global"
-        controller="BillsCalendarController">
+        controller="BillController">
     <!--Handlers for spinner events-->
     <aura:handler name="showSpinner" event="c:showSpinner" action="{!c.showSpinner}"/>
     <aura:handler name="hideSpinner" event="c:hideSpinner" action="{!c.hideSpinner}"/>

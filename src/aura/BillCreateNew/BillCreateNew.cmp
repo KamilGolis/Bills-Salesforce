@@ -48,7 +48,7 @@
                     <lightning:select aura:id="billStatus" name="select" label="Status rachunku" required="true"
                                       value="{!v.billsFields.Status__c}">
                         <aura:iteration items="{!v.avaibleStatuses}" var="stat">
-                            <option value="{!stat}" text="{!stat}"></option>
+                            <option value="{!stat}" text="{!stat}" selected="{!stat==v.billsFields.Status__c}"></option>
                         </aura:iteration>
                     </lightning:select>
                 </div>
@@ -58,7 +58,7 @@
                                       required="true"
                                       value="{!v.billsFields.Loan_Holder__c}">
                         <aura:iteration items="{!v.loanHolders}" var="loan">
-                            <option value="{!loan.Id}" text="{!loan.Name}"></option>
+                            <option value="{!loan.Id}" text="{!loan.Name}" selected="{!loan.Id==v.billsFields.Loan_Holder__c.Id}"></option>
                         </aura:iteration>
                     </lightning:select>
                 </div>

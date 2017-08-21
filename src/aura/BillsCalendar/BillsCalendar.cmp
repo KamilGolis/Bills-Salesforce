@@ -4,7 +4,7 @@
 
 <aura:component description="BillsCalendar"
                 implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
-                access="global" controller="BillsCalendarController">
+                access="global" controller="BillController">
     <ltng:require scripts="{!join(',', $Resource.AnyEventCal + '/moment.min.js',
             $Resource.AnyEventCal + '/moment-timezone.min.js',
             $Resource.AnyEventCal + '/jquery.min.js',

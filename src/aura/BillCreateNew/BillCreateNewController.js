@@ -1,49 +1,6 @@
 ({
     doInit: function (component, event, helper) {
-        var stats = component.get("c.getBillDetail");
-                stats.setCallback(this, function (res) {
-                    var state = res.getState();
-
-                    if (state === "SUCCESS") {
-                        var result = res.getReturnValue();
-                        component.set("v.avaibleStatuses", result.statuses);
-                        component.set("v.loanHolders", result.loanHolders);
-                        component.set("v.currentLoanHolder", result.currentLoanHolder);
-                        component.set("v.billsFields.Loan_Holder__c", result.currentLoanHolder.Id);
-                        component.set("v.billsFields.Status__c", result.currentStatus);
-                    } else if (state === "INCOMPLETE") {
-                        // do something
-                    } else if (state === "ERROR") {
-                        var errors = response.getError();
-                        if (errors) {
-                            if (errors[0] && errors[0].message) {
-                                console.log("Error message: " +
-                                    errors[0].message);
-                            }
-                        } else {
-                            console.log("Unknown error");
-                        }
-                    }
-                });
-                $A.enqueueAction(stats);
-
-        var tempRec = component.find("editRecord");
-        tempRec.getNewRecord(
-        "Bill__c",
-        null,
-        false,
-        $A.getCallback(function() {
-            var rec = component.get("v.selectedBill");
-            var error = component.get("v.error");
-            if (error || (rec === null)) {
-                console.log("Error initializing record template : " + error);
-                return;
-            }
-            console.log("Record template initialized : "+ rec.sobjectType);
-            })
-        );
-
-
+        helper.doInit(component, event);
     },
     recordUpdated: function (component, event, helper) {
             var eventParams = event.getParams();
@@ -61,6 +18,7 @@
     },
     toggleDialog: function (component, event, helper) {
             helper.showHideModal(component);
+            helper.doInit(component,event);
     },
     saveRecord: function (component, event, helper) {
             helper.showHideModal(component);
