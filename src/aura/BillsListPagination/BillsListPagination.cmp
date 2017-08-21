@@ -99,10 +99,9 @@
             <c:BillEditRecordComponent showDialog="{!v.showDialog}" remoteRecordId="{!v.remoteRecordId}"/>
 
             <!--New record component-->
-            <c:strike_modal title="Dodaj nowy rachunek" secondaryButtonLabel="Anuluj" primaryButtonLabel="Zapisz"
-                            showModal="{!v.toggleNewRecordModal}">
-                <c:BillCreateNew/>
-            </c:strike_modal>
+            <c:BillCreateNew showDialog="{!v.toggleNewRecordModal}"/>
+
+
         </div>
     </lightning:card>
 

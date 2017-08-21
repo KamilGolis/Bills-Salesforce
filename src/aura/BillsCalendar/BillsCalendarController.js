@@ -29,7 +29,7 @@
                     right: calendarButtons
                 },
                 defaultDate: moment().format("YYYY-MM-DD"),
-                navLinks: true, // can click day/week names to navigate views
+                navLinks: false, // can click day/week names to navigate views
                 editable: true,
                 eventLimit: true, // allow "more" link when too many events
                 weekends: component.get('v.weekends'),
@@ -37,16 +37,12 @@
                 eventBorderColor: component.get('v.billsBorderColor'),
                 eventTextColor: component.get('v.billsTextColor'),
                 events: billsArray,
-                eventClick: function(calEvent, jsEvent, view) {
+                eventClick: function (calEvent, jsEvent, view) {
                     component.set("v.remoteRecordId", calEvent.id);
                     component.set("v.editRecord", true);
                 },
-                eventDrop: function(event, delta, revertFunc) {
-                    var id = event.id;
-                    var newDate = moment(event.start._i).add(delta).format();
-                    component.set("v.remoteRecordId", id);
-                    component.set("v.editRecord", false);
-                    component.find("editRecordComponent").saveDate(newDate);
+                eventDrop: function (event, delta, revertFunc) {
+                   //TODO
                 },
                 viewRender: function (view, element) {
                     component.getEvent("showSpinner").fire();
@@ -74,7 +70,7 @@
             }
             billsArray.push(newBill);
         });
-        $('#calendar').fullCalendar( 'addEventSource', billsArray);
+        $('#calendar').fullCalendar('addEventSource', billsArray);
         $('#calendar').fullCalendar('rerenderEvents');
         component.getEvent("hideSpinner").fire();
     }

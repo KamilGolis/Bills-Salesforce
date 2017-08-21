@@ -1,5 +1,4 @@
-<aura:component
-        implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:appHostable"
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:appHostable"
         access="global"
         controller="BillsCalendarController">
     <!--Handlers for spinner events-->

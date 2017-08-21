@@ -19,14 +19,6 @@
         helper.showHideModal(component);
         helper.showToast(component, event);
     },
-    saveDate: function (component, event, helper) {
-        var params = event.getParam("arguments");
-        if (params) {
-            //TODO This is not working. Component fields are not visible. I don't know why.
-            component.find("editRecord").set("v.billsFields.Pay_Date__c", params.newDate);
-            helper.saveRecord(component, event);
-        }
-    },
     recordUpdated: function (component, event, helper) {
         var eventParams = event.getParams();
         if (eventParams.changeType === "CHANGED") {

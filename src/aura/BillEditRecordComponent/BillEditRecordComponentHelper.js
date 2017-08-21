@@ -15,7 +15,7 @@
         var cmpId = component.get("v.remoteRecordId");
         tempRec.set("v.recordId", cmpId);
         tempRec.reloadRecord();
-
+        console.log(cmpId);
         var stats = component.get("c.getBillDetail");
         stats.setParams({
             billId: cmpId
@@ -26,6 +26,8 @@
             if (state === "SUCCESS") {
                 var result = res.getReturnValue();
                 component.set("v.avaibleStatuses", result.statuses);
+                component.set("v.loanHolders", result.loanHolders);
+                component.set("v.currentLoanHolder", result.currentLoanHolder);
             } else if (state === "INCOMPLETE") {
                 // do something
             } else if (state === "ERROR") {
