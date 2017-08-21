@@ -23,6 +23,7 @@
     <aura:attribute name="idVal" type="String"/>
     <aura:attribute name="newOrEdit" type="String" default="New"/>
     <aura:attribute name="month" type="Integer"/>
+    <aura:attribute name="year" type="Integer"/>
     <aura:attribute name="billsBackgroundColor" type="String"/>
     <aura:attribute name="billsBorderColor" type="String"/>
     <aura:attribute name="billsTextColor" type="String"/>

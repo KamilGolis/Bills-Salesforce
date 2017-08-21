@@ -1,12 +1,16 @@
 ({
     //Get all bills
-    getBills: function (component, month) {
+    getBills: function (component, month, year) {
         if (!month) {
             month = new Date().getMonth() + 1;
             component.set("v.month", month);
         }
+        if (!year) {
+            year = new Date().getYear() +1900;
+            component.set("v.year", year);
+        }
         var action = component.get("c.getBillsByMonth");
-        action.setParams({"month": month});
+        action.setParams({"month": month, "year": year});
         action.setCallback(this, function (response) {
             var state = response.getState();
 

@@ -1,11 +1,9 @@
-@isTest
+@IsTest
 private class CountingServiceTest {
 
-	//Countin sercive test class
 	@TestSetup
 	static void testsetup() {
 		// Insert dummy records
-
 		Loan_Holder__c loan = new Loan_Holder__c();
 		loan.Name = 'Test loan';
 		insert loan;
@@ -23,8 +21,11 @@ private class CountingServiceTest {
 		insert bills;
 	}
 
-	@isTest
-	private static void testGetSummary() {
-		System.assertEquals(100, CountingService.getSummary(Date.today()));
+	@IsTest static void testGetSummary() {
+		System.assertEquals(100, CountingService.getSummary());
+	}
+
+	@IsTest static void testGetPricesForMonth() {
+		System.assertEquals(100, CountingService.getMonthSummary(Date.today().month()));
 	}
 }

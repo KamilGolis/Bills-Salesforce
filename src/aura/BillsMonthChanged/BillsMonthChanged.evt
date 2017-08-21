@@ -4,4 +4,5 @@
 
 <aura:event type="COMPONENT" description="BillsMonthChanged">
     <aura:attribute name="month" type="Integer"/>
+    <aura:attribute name="year" type="Integer"/>
 </aura:event>

@@ -34,8 +34,9 @@
     <!--Handler for month change event fired in calendar-->
     <aura:handler name="monthChanged" event="c:BillsMonthChanged" action="{!c.monthChanged}"/>
 
-    <!--Current month-->
+    <!--Current month and year-->
     <aura:attribute name="month" type="Integer"/>
+    <aura:attribute name="year" type="Integer"/>
 
     <!--Rest of app layout-->
     <div>

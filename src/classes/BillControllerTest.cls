@@ -1,7 +1,7 @@
 @IsTest
 private class BillControllerTest {
 
-	@IsTest static void TestGetSummary() {
+	@IsTest static void testGetSummary() {
 		List<Bill__c> bills = createTestRecords();
 
 		bills = [SELECT Id, Name, Loan_Holder__c, Price__c FROM Bill__c];
@@ -19,7 +19,7 @@ private class BillControllerTest {
 
 	}
 
-	@IsTest static void TestGetBillDetail() {
+	@IsTest static void testGetBillDetail() {
 		List<Bill__c> bills = createTestRecords();
 		List<BillController.BillDetailWrapper> billsDetail = new List<BillController.BillDetailWrapper>();
 		for (Bill__c bill : bills) {
@@ -41,7 +41,7 @@ private class BillControllerTest {
 
 	}
 
-	@IsTest static void TestGetBillByIdWithoutId() {
+	@IsTest static void testGetBillByIdWithoutId() {
 		List<Bill__c> bills = createTestRecords();
 		BillController.BillDetailWrapper billsDetail = BillController.getBillDetail('000000000000000000');
 		System.assertEquals('Test Loan', billsDetail.currentLoanHolder.Name);
@@ -51,7 +51,7 @@ private class BillControllerTest {
 		System.assertEquals('Do zapłaty', billsDetail.currentStatus);
 	}
 
-	@IsTest static void TestGetBillById() {
+	@IsTest static void testGetBillById() {
 		List<Bill__c> bills = createTestRecords();
 
 		for (Bill__c bill : bills) {
@@ -63,7 +63,7 @@ private class BillControllerTest {
 		}
 	}
 
-	@IsTest static void TestGetBillByIdNull() {
+	@IsTest static void testGetBillByIdNull() {
 		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User'];
 		User u2 = new User(Alias = 'newUser', Email = 'newtestuser@testorg.com',
 				EmailEncodingKey = 'UTF-8', LastName = 'Testing', LanguageLocaleKey = 'en_US',
@@ -80,7 +80,7 @@ private class BillControllerTest {
 		}
 	}
 
-	@IsTest static void TestGetDetailOnly() {
+	@IsTest static void testGetDetailOnly() {
 		List<Bill__c> bills = createTestRecords();
 		List<BillController.BillDetailWrapper> billsDetail = new List<BillController.BillDetailWrapper>();
 		for (Bill__c bill : bills) {
@@ -102,15 +102,16 @@ private class BillControllerTest {
 		}
 	}
 
-	@IsTest static void TestGetAllBills() {
+	@IsTest static void testGetAllBills() {
 		List<Bill__c> bills = createTestRecords();
 		System.assertEquals(bills.size(), BillController.getAllBills().size());
 	}
 
-	@IsTest static void TestGetBillsByMonth() {
+	@IsTest static void testGetBillsByMonth() {
 		List<Bill__c> bills = createTestRecords();
 		Integer month = Date.today().month();
-		List<BillController.BillsWrapper> dbBills = BillController.getBillsByMonth(month);
+		Integer year = Date.today().year();
+		List<BillController.BillsWrapper> dbBills = BillController.getBillsByMonth(month, year);
 
 		System.assertEquals(bills.size(), dbBills.size());
 		for (BillController.BillsWrapper b : dbBills) {
@@ -119,7 +120,7 @@ private class BillControllerTest {
 		}
 	}
 
-	@IsTest static void TestGetBillByIdWrapper() {
+	@IsTest static void testGetBillByIdWrapper() {
 		List<Bill__c> bills = createTestRecords();
 		for (Bill__c b : bills) {
 			BillController.BillsWrapper billsWrapper = BillController.getBillByIdWrapper(b.Id);
@@ -128,6 +129,17 @@ private class BillControllerTest {
 			System.assertEquals(b.Description__c, billsWrapper.description);
 			System.assertEquals(b.Pay_Date__c, billsWrapper.startDateTime);
 			System.assertEquals(b.Pay_Date__c, billsWrapper.endDateTime);
+		}
+	}
+
+	@IsTest static void testConvertFromWrapper() {
+		List<Bill__c> bills = createTestRecords();
+		List<Bill__c> billsWrapper = BillController.convertFromWrapper(BillController.getAllBills());
+
+		System.assertEquals(bills.size(), billsWrapper.size());
+
+		for (Integer i=0; i<billsWrapper.size(); i++) {
+			System.assertEquals(bills[i].Id, billsWrapper[i].Id);
 		}
 	}
 

@@ -102,9 +102,9 @@ public with sharing class BillController {
 	}
 
 	@AuraEnabled
-	public static List<BillsWrapper> getBillsByMonth(Integer month) {
+	public static List<BillsWrapper> getBillsByMonth(Integer month, Integer year) {
 		List<BillsWrapper> outputBills = new List<BillsWrapper>();
-		List<Bill__c> bills = getDataByMonth(Integer.valueOf(month));
+		List<Bill__c> bills = getDataByMonth(Integer.valueOf(month), Integer.valueOf(year));
 		if (isAccessible('Bill__c')) {
 			for (Bill__c obj : bills) {
 				BillsWrapper bill = new BillsWrapper();
@@ -154,12 +154,12 @@ public with sharing class BillController {
 		return null;
 	}
 
-	private static List<Bill__c> getDataByMonth(Integer month) {
+	private static List<Bill__c> getDataByMonth(Integer month, Integer year) {
 		Id ownerId = UserInfo.getUserId();
 		List<Bill__c> bills = [
 				SELECT Id, Name, Category__c, Status__c, Pay_Date__c, Price__c, Description__c, Loan_Holder__r.Name, OwnerId
 				FROM Bill__c
-				WHERE CALENDAR_MONTH(Pay_Date__c) = :month AND OwnerId = :ownerId
+				WHERE CALENDAR_MONTH(Pay_Date__c) = :month AND CALENDAR_YEAR(Pay_Date__c) = :year AND OwnerId = :ownerId
 		ORDER BY Name
 		];
 		return bills;
@@ -201,5 +201,20 @@ public with sharing class BillController {
 	public static Boolean isAccessible(String sObjectType) {
 		SObjectType schemaType = Schema.getGlobalDescribe().get(sObjectType);
 		return schemaType.getDescribe().isAccessible();
+	}
+
+	public static List<Bill__c> convertFromWrapper(List<BillsWrapper> bills) {
+		List<Id> billsId = new List<Id>();
+		Id userId = UserInfo.getUserId();
+		for (BillsWrapper b : bills) {
+			billsId.add(b.Id);
+		}
+		List<Bill__c> dbBills = [
+				SELECT Id, Name, Category__c, Status__c, Pay_Date__c, Price__c, Description__c, Loan_Holder__r.Name
+				FROM Bill__c
+				WHERE OwnerId = :userId AND Id IN :billsId
+		ORDER BY Name
+		];
+		return dbBills;
 	}
 }

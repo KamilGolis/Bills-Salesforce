@@ -47,9 +47,11 @@
                 viewRender: function (view, element) {
                     component.getEvent("showSpinner").fire();
                     var month = $('#calendar').fullCalendar('getDate').format("M");
+                    var year = $('#calendar').fullCalendar('getDate').format("Y");
                     component.set("v.month", month);
+                    component.set("v.year", year);
                     var compEvent = component.getEvent("monthChanged");
-                    compEvent.setParams({"month": month});
+                    compEvent.setParams({"month": month, "year": year});
                     compEvent.fire();
                 }
             });

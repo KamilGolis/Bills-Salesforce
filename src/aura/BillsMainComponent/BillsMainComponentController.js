@@ -7,7 +7,8 @@
     //Update content of v.bills when event from other components fire
     updateContent: function (component, event, helper) {
         var month = component.get("v.month");
-        helper.getBills(component, month);
+        var year = component.get("v.year");
+        helper.getBills(component, month, year);
     },
     
 	//Method for activating spinner on screen
@@ -24,6 +25,7 @@
 
     monthChanged: function (component, event, helper) {
         var month = event.getParam("month");
-        helper.getBills(component, month);
+        var year = event.getParam("year");
+        helper.getBills(component, month, year);
     }
 })
